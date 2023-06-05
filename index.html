@@ -10,20 +10,64 @@
 				height: 100%;
 				width: 100%;
 			}
-			body {
+			body.off {
+				background: #000;
+			}
+			body.on {
 				background: linear-gradient( 45deg, #000, #444 );
 				background: radial-gradient( #333, #000 );
 			}
-			h1 {
+			.potato-holder {
 				display: block;
 				position: absolute;
-				top: 45vh;
-				width: 100%;
+				top: 50%;
+				left: 50%;
+				transform: translate( -50%, -50% );
+				max-width: 75%;
+				max-height: 75%;
 				text-align: center;
+			}
+			.potato-img {
+				display: none;
+				max-height: 100%;
+				max-width: 100%;
+			}
+			.potato-img.off {
+				opacity: 0.5;
+			}
+			.potato-holder.off .potato-img.off {
+				display: inline;
+			}
+			.potato-holder.on .potato-img.on {
+				display: inline;
 			}
 		</style>
 	</head>
-	<body>
-		<h1>SwitchySwitchyPotato.com</h1>
+	<body class="off">
+		<div class="potato-holder off">
+			<img
+				class="potato-img off"
+				src="./img/potato-off.png"
+				alt="A potato with an embedded light switch - off position"
+			/>
+			<img
+				class="potato-img on"
+				src="./img/potato-on.png"
+				alt="A potato with an embedded light switch - on position"
+			/>
+		</div>
+		<script>
+			// Get the body
+			const body = document.querySelector( 'body' );
+			// Get the potato image
+			const potato_holder = document.querySelector( '.potato-holder' );
+			// When clicked, toggle the 'on' class
+			potato_holder.addEventListener( 'click', () => {
+				potato_holder.classList.toggle( 'on' );
+				potato_holder.classList.toggle( 'off' );
+				body.classList.toggle( 'on' );
+				body.classList.toggle( 'off' );
+			} );
+		</script>
 	</body>
 </html>
