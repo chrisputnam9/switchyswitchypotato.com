@@ -47,12 +47,23 @@
 				margin: 0;
 				height: 100%;
 				width: 100%;
+				animation: gradient 1s ease infinite;
+			}
+			@keyframes gradient {
+				0% {
+					background-position: 0% 50%;
+				}
+				50% {
+					background-position: 100% 50%;
+				}
+				100% {
+					background-position: 0% 50%;
+				}
 			}
 			body.off {
 				background: #000;
 			}
 			body.on {
-				background: linear-gradient( 45deg, #000, #444 );
 				background: radial-gradient( #333, #000 );
 			}
 			.potato-holder {
@@ -69,6 +80,9 @@
 				display: none;
 				max-height: 100%;
 				max-width: 100%;
+			}
+			.potato-img.on {
+				opacity: 0.8;
 			}
 			.potato-img.off {
 				opacity: 0.5;
@@ -105,7 +119,45 @@
 				potato_holder.classList.toggle( 'off' );
 				body.classList.toggle( 'on' );
 				body.classList.toggle( 'off' );
+				body.style = '';
+
+				if ( body.classList.contains( 'on' ) ) {
+					maybeDoFunStuff();
+				}
 			} );
+			// Maybe do some fun stuff
+			function maybeDoFunStuff() {
+				// Default odds
+				// See if we already did fun stuff
+				// Roll the dice
+				doFunStuff();
+			}
+			// Do the fun stuff!
+			function doFunStuff() {
+				// Decide how many colors - 2-10
+				const numberOfColors = getRandomNumber( 2, 10 );
+				// Generate an array of random colors
+				const colors = [];
+				for ( let i = 0; i < numberOfColors; i++ ) {
+					colors.push( getRandomColor() );
+				}
+				const colorString = colors.join( ', ' );
+
+				body.style = `background: radial-gradient( ${ colorString } );`;
+			}
+			// Get a random color
+			// - HSL
+			// - Fairly bright
+			function getRandomColor() {
+				const hue = getRandomNumber( 0, 360 );
+				const saturation = getRandomNumber( 50, 100 );
+				const lightness = getRandomNumber( 50, 100 );
+				return `hsl( ${ hue }, ${ saturation }%, ${ lightness }% )`;
+			}
+			// Pick a random number
+			function getRandomNumber( min, max ) {
+				return Math.floor( Math.random() * ( max - min + 1 ) ) + min;
+			}
 		</script>
 	</body>
 </html>
