@@ -47,24 +47,27 @@
 				margin: 0;
 				height: 100%;
 				width: 100%;
-				animation: gradient 1s ease infinite;
 			}
-			@keyframes gradient {
-				0% {
-					background-position: 0% 50%;
-				}
-				50% {
-					background-position: 100% 50%;
-				}
-				100% {
-					background-position: 0% 50%;
-				}
-			}
+			html,
 			body.off {
 				background: #000;
 			}
 			body.on {
 				background: radial-gradient( #333, #000 );
+			}
+			body.fun {
+				animation: fadeinout 0.55s ease infinite;
+			}
+			@keyframes fadeinout {
+				0% {
+					opacity: 1;
+				}
+				50% {
+					opacity: 0.8;
+				}
+				100% {
+					opacity: 1;
+				}
 			}
 			.potato-holder {
 				display: block;
@@ -119,9 +122,11 @@
 				potato_holder.classList.toggle( 'off' );
 				body.classList.toggle( 'on' );
 				body.classList.toggle( 'off' );
+				body.classList.remove( 'fun' );
 				body.style = '';
 
 				if ( body.classList.contains( 'on' ) ) {
+					body.classList.add( 'fun' );
 					maybeDoFunStuff();
 				}
 			} );
@@ -158,6 +163,22 @@
 			function getRandomNumber( min, max ) {
 				return Math.floor( Math.random() * ( max - min + 1 ) ) + min;
 			}
+			// Play mp3 from a random starting point on repeat
+			function playMusic() {
+				// Get the audio element
+				const music = new Audio( './audio/modern-energetic-edm.mp3' );
+				// Get a random starting point
+				const startingPoint = getRandomNumber( 0, 100 );
+				// Set the starting point
+				music.currentTime = startingPoint;
+				// Set to repeat
+				music.loop = true;
+				// Play the audio
+				music.play();
+			}
 		</script>
 	</body>
 </html>
+<!--
+Music Credit: Modern Energetic EDM by TimTaj (https://timtaj.com)</p>
+-->
