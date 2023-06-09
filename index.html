@@ -90,11 +90,12 @@
 			.potato-img.off {
 				opacity: 0.5;
 			}
-			.potato-holder.off .potato-img.off {
-				display: inline;
-			}
+			.potato-holder.off .potato-img.off,
 			.potato-holder.on .potato-img.on {
 				display: inline;
+			}
+			.audio {
+				display: none;
 			}
 		</style>
 	</head>
@@ -111,36 +112,69 @@
 				alt="A potato with an embedded light switch - on position"
 			/>
 		</div>
+		<audio
+			class="audio-music"
+			src="./media/modern-energetic-edm.mp3"
+		></audio>
 		<script>
 			// Get the body
 			const body = document.querySelector( 'body' );
+
 			// Get the potato image
 			const potato_holder = document.querySelector( '.potato-holder' );
+
+			// Get the audio element
+			const track = document.querySelector( '.audio-music' );
+
 			// When clicked, toggle the 'on' class
 			potato_holder.addEventListener( 'click', () => {
 				potato_holder.classList.toggle( 'on' );
 				potato_holder.classList.toggle( 'off' );
 				body.classList.toggle( 'on' );
 				body.classList.toggle( 'off' );
+
+				stopMusic();
 				body.classList.remove( 'fun' );
 				body.style = '';
 
 				if ( body.classList.contains( 'on' ) ) {
-					body.classList.add( 'fun' );
 					maybeDoFunStuff();
 				}
 			} );
+
 			// Maybe do some fun stuff
+			// - random chance with each click
 			function maybeDoFunStuff() {
 				// Default odds
+				const odds = 5;
+
 				// See if we already did fun stuff
+				let didFunStuff = localStorage.getItem( 'didFunStuff' ) ?? 0;
+
+				if ( didFunStuff > 0 ) {
+					odds = 10;
+				}
+
 				// Roll the dice
-				doFunStuff();
+				const roll = getRandomNumber( 1, odds );
+				console.log( 'roll: ', roll );
+				if ( roll === odds ) {
+					body.classList.add( 'fun' );
+					setRandomGradient();
+					playMusic();
+					// Note that we did the fun stuff
+					localStorage.setItem( 'didFunStuff', ++didFunStuff );
+				}
 			}
+
 			// Do the fun stuff!
-			function doFunStuff() {
+			function doFunStuff() {}
+
+			// Set a random gradient
+			function setRandomGradient() {
 				// Decide how many colors - 2-10
 				const numberOfColors = getRandomNumber( 2, 10 );
+
 				// Generate an array of random colors
 				const colors = [];
 				for ( let i = 0; i < numberOfColors; i++ ) {
@@ -148,8 +182,10 @@
 				}
 				const colorString = colors.join( ', ' );
 
+				// Set the body style
 				body.style = `background: radial-gradient( ${ colorString } );`;
 			}
+
 			// Get a random color
 			// - HSL
 			// - Fairly bright
@@ -159,22 +195,28 @@
 				const lightness = getRandomNumber( 50, 100 );
 				return `hsl( ${ hue }, ${ saturation }%, ${ lightness }% )`;
 			}
+
 			// Pick a random number
 			function getRandomNumber( min, max ) {
 				return Math.floor( Math.random() * ( max - min + 1 ) ) + min;
 			}
+
 			// Play mp3 from a random starting point on repeat
 			function playMusic() {
-				// Get the audio element
-				const music = new Audio( './audio/modern-energetic-edm.mp3' );
-				// Get a random starting point
-				const startingPoint = getRandomNumber( 0, 100 );
-				// Set the starting point
-				music.currentTime = startingPoint;
+				// Set a random starting point
+				track.currentTime = getRandomNumber(
+					0,
+					Math.floor( track.duration )
+				);
 				// Set to repeat
-				music.loop = true;
+				track.loop = true;
 				// Play the audio
-				music.play();
+				track.play();
+			}
+
+			// Stop the music
+			function stopMusic() {
+				track.pause();
 			}
 		</script>
 	</body>
